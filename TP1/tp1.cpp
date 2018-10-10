@@ -10,29 +10,33 @@ int main(int argc, char *argv[]){
     CImg<> img("MR_head.Coronal.hdr"), res = img.get_threshold(thresholdValue);
     CImgDisplay display(img, "MR_head.Coronal.hdr");
     
+    bool algo = false;
+    
     while (!display.is_closed()) {
         if(display.is_keyESC())
             break;
             
-        if(display.wheel()){
-            cpt = display.wheel();
-            res = img.get_slice(cpt);
-            std::cout << cpt << std::endl;
+        if(display.is_keyA())
+            algo = true;
+        
+        if(!algo){
+            if(display.wheel()){
+                cpt = display.wheel();
+            }
+                
+            if(display.is_keyPADADD()){
+                thresholdValue = (thresholdValue + 1) % 255;
+                res = img.get_threshold(thresholdValue);
+            }
+            if(display.is_keyPADSUB()){
+                thresholdValue = (thresholdValue - 1) % 255;
+                res = img.get_threshold(thresholdValue);
+            }
+            display.display(res.get_slice(cpt));
         }
-            
-        if(display.is_keyPADADD()){
-            thresholdValue = (thresholdValue + 1) % 255;
-
+        else{
+            std::cout << "algo inc" << std::endl;
         }
-        if(display.is_keyPADSUB()){
-            thresholdValue = (thresholdValue - 1) % 255;
-            
-        }
-        res = img.get_threshold(thresholdValue);
-        //(img.get_slice(cpt),res.normalize(0,255)).display();
-
-        //display.display(img.get_slice(cpt));
-        display.display(res.get_slice(cpt));
         display.wait();
     }
     
