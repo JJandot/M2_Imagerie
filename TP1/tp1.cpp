@@ -17,11 +17,8 @@ int main(int argc, char *argv[]){
     while (!display.is_closed()) {
         if(display.is_keyESC())
             break;
-            
         if(display.is_keyA())
             algo = true;
-        
-    
         if(display.wheel()){
             cpt += display.wheel();
             display.set_wheel();
@@ -43,8 +40,6 @@ int main(int argc, char *argv[]){
                 res.erode(2, 2, 2);
 
             res.label(0, 0);
-            
-            
             int histo[256];
             memset(histo, 0, sizeof(histo));
 
@@ -55,7 +50,6 @@ int main(int argc, char *argv[]){
                     }
                 }
             }
-            
             int max = 0;
             int maxI = 0;
             for(int i = 0; i < 256; ++i){
@@ -64,7 +58,6 @@ int main(int argc, char *argv[]){
                     maxI = i;
                 }
             }
-
             for(int i = 0; i < img.width(); ++i){
                 for(int j = 0; j < img.height(); ++j){
                     for(int k = 0; k < img.depth(); ++k){
@@ -75,8 +68,6 @@ int main(int argc, char *argv[]){
                     }
                 }
             }
-            
-            
             for(int i = 0; i < erosionCpt; ++i)
                 res.dilate(2, 2, 2);
                 
