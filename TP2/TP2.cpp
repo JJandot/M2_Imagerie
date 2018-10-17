@@ -5,13 +5,21 @@
 
 using namespace cimg_library;
 
-int main(int argc, char *argv[]){  
+int main(int argc, char *argv[]){
+    char cNomImgLue[250], nomHisto[250];
+    if (argc != 3) {
+        std::cerr << "Usage: ImageIn.hdr out/nomhisto.dat" << std::endl;
+        exit(1);
+    }
+    sscanf(argv[1], "%s", cNomImgLue);
+    sscanf(argv[2], "%s", nomHisto);
+
     int cpt = 0;
 
-    CImg<> img("liver_07.liver.norm.hdr");
-    CImgDisplay display(img, "liver_07.liver.norm.hdr");
+    CImg<> img(cNomImgLue);
+    CImgDisplay display(img, cNomImgLue);
     
-    std::ofstream histo("histo.dat");
+    std::ofstream histo(nomHisto);
     
     while (!display.is_closed()) {
         if(display.is_keyESC())
