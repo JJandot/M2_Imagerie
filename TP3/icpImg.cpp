@@ -23,19 +23,28 @@ enum Metric {SSD, NCC};
 
 void computeCorrespondences(MESH& mesh, const CImg<float> &dist,const float l)
 {
-    unsigned int nbpoints=dist.height();
-    unsigned int S=dist.width()/2;
+    unsigned int nbpoints = dist.height();
+    unsigned int S = dist.width() / 2;
 
-
-    for(unsigned int i=0;i<nbpoints;i++)
-    {
-
-        /// A COMPLETER
+    for(unsigned int i = 0; i < nbpoints; ++i){
+        float min = dist(i, 0);
+        float jMin = 0;
+        for(int j = 1; j < dist.width(); ++j){
+            if(dist(i, j) < min){
+                min = dist(i, j);
+                jMin = j;
+            }
+        }
         float p[3];
-        mesh.getPoint(p,i);
+        float n[3];
+        mesh.getPoint(p, i);
+        mesh.getNormal(n, i);
+        for(int k = 0; k < 3; ++k){
+            p[k] = p[k] - l * jMin * n[k];
+        }
+
         mesh.setCorrespondence(p,i);
     }
-
 }
 
 
@@ -43,9 +52,9 @@ CImg<float> computeDistance(const CImg<unsigned char> &sourceProf,const CImg<uns
 {
     unsigned int nbPoints = sourceProf.height();
     unsigned int N = sourceProf.width();
-    unsigned int S = (targetProf.width() - sourceProf.width()) / 2;
+    int S = (targetProf.width() - sourceProf.width()) / 2;
 
-    CImg<float> dist(2*S, nbPoints);
+    CImg<float> dist(2 * S, nbPoints);
     dist.fill(0);
 
 
@@ -58,11 +67,17 @@ CImg<float> computeDistance(const CImg<unsigned char> &sourceProf,const CImg<uns
         std::cout << targetProf.width() << std::endl;
         std::cout << S << std::endl;
 
-        /// A COMPLETER
+        float sum;
         
-        for(int i = 0; i < nbPoints; ++i){
-            for(int j = 0; j < 2 * S; ++j){
-                dist(j, i) = 0;
+        //parcours en hauteur
+        for(int h = 0; h < nbPoints; ++h){
+            for(int j = -S; j < S; ++j){
+                sum = 0;
+                for(int w = 0; w < N; ++w){
+                    sum += pow((float)sourceProf(w, h) - (float)targetProf(w + S + j, h), 2);
+                }
+                sum /= (float)(2 * S);
+                dist(j + S, h) = sum;
             }
         }
 
@@ -73,7 +88,7 @@ CImg<float> computeDistance(const CImg<unsigned char> &sourceProf,const CImg<uns
         /// A COMPLETER
     }
 
-    // dist.display();
+    //dist.display();
 
     return dist;
 }
@@ -103,7 +118,7 @@ CImg<unsigned char> computeProfiles(const MESH& mesh, const IMG<unsigned char,fl
         }
     }
 
-    prof.display();
+    //prof.display();
 
     return prof;
 }
