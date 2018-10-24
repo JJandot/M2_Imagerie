@@ -13,18 +13,13 @@ int main(int argc, char *argv[]){
     }
     sscanf(argv[1], "%s", cNomImgLue);
     sscanf(argv[2], "%s", nomHisto);
-
     int cpt = 0;
-
     CImg<> img(cNomImgLue);
     CImgDisplay display(img, cNomImgLue);
-    
     std::ofstream histo(nomHisto);
-    
     while (!display.is_closed()) {
         if(display.is_keyESC())
             break;
-            
         if(display.button()){
             int x = display.mouse_x() * (float)((float)img.width() / (float)display.width());
             int y = display.mouse_y() * (float)((float)img.height() / (float)display.height());
@@ -37,18 +32,15 @@ int main(int argc, char *argv[]){
                 int regionSize = 0;
                 unsigned char white[] = {255, 255, 255};
                 image.draw_fill(x, y, cpt, white, 1, region, i);
-                for(int j = 0; j < region.width(); ++j){
-                    for(int k = 0; k < region.height(); ++k){
+                for(int j = 0; j < region.width(); ++j)
+                    for(int k = 0; k < region.height(); ++k)
                         if(region(j, k) > 0)
                             ++regionSize;
-                    }
-                }
                 histo << i << " " << regionSize << std::endl;
             }
             std::cout << "End procesing" << std::endl;
             histo.close();
         }
-        
         if(display.wheel()){
             cpt += display.wheel();
             display.set_wheel();
@@ -58,4 +50,3 @@ int main(int argc, char *argv[]){
     }
     return 0;
 }
-

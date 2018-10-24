@@ -41,17 +41,30 @@ void computeCorrespondences(MESH& mesh, const CImg<float> &dist,const float l)
 
 CImg<float> computeDistance(const CImg<unsigned char> &sourceProf,const CImg<unsigned char> &targetProf,const Metric metric)
 {
-    unsigned int nbpoints=sourceProf.height();
-    unsigned int N=sourceProf.width();
-    unsigned int S=(targetProf.width()-sourceProf.width())/2;
+    unsigned int nbPoints = sourceProf.height();
+    unsigned int N = sourceProf.width();
+    unsigned int S = (targetProf.width() - sourceProf.width()) / 2;
 
-    CImg<float> dist(2*S,nbpoints);
+    CImg<float> dist(2*S, nbPoints);
     dist.fill(0);
 
-    if(metric==SSD)
-    {
+
+    if(metric == SSD)
+    {    
+        std::cout << "--------------------------------" << std::endl;
+        std::cout << sourceProf.height() << std::endl;
+        std::cout << sourceProf.width() << std::endl;
+        std::cout << targetProf.height() << std::endl;
+        std::cout << targetProf.width() << std::endl;
+        std::cout << S << std::endl;
 
         /// A COMPLETER
+        
+        for(int i = 0; i < nbPoints; ++i){
+            for(int j = 0; j < 2 * S; ++j){
+                dist(j, i) = 0;
+            }
+        }
 
     }
     else // NCC
@@ -78,16 +91,14 @@ CImg<unsigned char> computeProfiles(const MESH& mesh, const IMG<unsigned char,fl
         int cpt = 0;
         for(int j = 0; j < Ni; ++j){
             for(int k = 0; k < 3; ++k){
-                pp[k] = p[k] + n[k] * l * j;
+                pp[k] = p[k] - n[k] * l * j;
             }
             prof(cpt++, i) = img.getValue(pp, interpolationType);
         }
         for(int j = 0; j < No; ++j){
             for(int k = 0; k < 3; ++k){
-                pp[k] = p[k] - n[k] * l * j;
-                std::cout << pp[k];
+                pp[k] = p[k] + n[k] * l * j;
             }
-            std::cout << std::endl;
             prof(cpt++, i) = img.getValue(pp, interpolationType);
         }
     }
