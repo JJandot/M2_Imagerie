@@ -59,13 +59,7 @@ CImg<float> computeDistance(const CImg<unsigned char> &sourceProf,const CImg<uns
 
 
     if(metric == SSD)
-    {    
-        std::cout << "--------------------------------" << std::endl;
-        std::cout << sourceProf.height() << std::endl;
-        std::cout << sourceProf.width() << std::endl;
-        std::cout << targetProf.height() << std::endl;
-        std::cout << targetProf.width() << std::endl;
-        std::cout << S << std::endl;
+    {
 
         float sum;
         
