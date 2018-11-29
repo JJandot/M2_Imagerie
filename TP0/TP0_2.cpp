@@ -4,7 +4,7 @@
 using namespace cimg_library;
 
 int main(int argc, char *argv[]){  
-    CImg<> img("DATA/knix.hdr");
+    CImg<> img("Sinus/ScannerTeteEntiere.hdr");
     CImgDisplay display(img, "knix.hdr");
     
     int cpt = 1;
